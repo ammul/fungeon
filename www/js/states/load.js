@@ -8,13 +8,21 @@ var loadState = {
 
         game.load.spritesheet("fungeon","assets/game/fungeon_32x32.png",32,32,20);
         game.load.spritesheet("hero","assets/game/hero.png");
+        game.load.spritesheet("sword","assets/game/sword.png");
         game.load.spritesheet("enemy","assets/game/enemy.png");
         game.load.spritesheet("gold","assets/game/gold.png");
+
+
+
+    },
+
+    create: function(){
 
         FileService.checkIfFileExists("score.txt").then(function(){
 
             FileService.readFile("score.txt").then(function(score){
                 ScoreService.setHighScore(score);
+                game.state.start("menu");
             });
 
 
@@ -24,15 +32,10 @@ var loadState = {
             FileService.createFile("score.txt").then(function(){
                 FileService.overwriteFile("score.txt","0");
                 ScoreService.setHighScore(0);
+                game.state.start("menu");
             });
 
-        })
-
-    },
-
-    create: function(){
-
-        game.state.start("menu");
+        });
 
     }
 

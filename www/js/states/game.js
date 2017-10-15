@@ -3,6 +3,8 @@ var gameState = {
     inputArea:null,
     swipe:null,
     hero:null,
+    weapon:null,
+    isAttacking:false,
     enemies:null,
     enemySpawnTimer:null,
     score:{
@@ -26,11 +28,15 @@ var gameState = {
         game.physics.arcade.enable(this.hero);
         this.hero.inputEnabled = true;
         this.hero.body.collideWorldBounds=true;
-        //this.hero.events.onInputDown.add(this.heroInputListener, this);
+
+        this.weapon = game.add.sprite(0,-48, 'sword');
+        this.hero.addChild(this.weapon);
+        this.weapon.visible = false;
 
         this.enemies = game.add.group();
         this.enemySpawnTimer = game.time.events.loop(Phaser.Timer.SECOND * 1, this.addEnemy, this);
 
+        ScoreService.setLatestScore(0);
         this.score.value = 0;
         this.lives.value = 3;
 
@@ -41,6 +47,7 @@ var gameState = {
     update: function(){
 
         game.physics.arcade.overlap(this.hero, this.enemies, this.enemyCollisionHandler, null, this);
+        game.physics.arcade.overlap(this.weapon, this.enemies, this.weaponHitCollisionHandler, null, this);
 
         //check if pointer is in control area
         if(game.input.activePointer.isDown&&game.input.activePointer.y>deviceHeight-(deviceHeight/5)){
@@ -54,16 +61,17 @@ var gameState = {
         }
 
         var direction = this.swipe.check();
-        if (direction!==null) {
+        if (direction!==null&&!this.isAttacking) {
             // direction= { x: x, y: y, direction: direction }
             switch(direction.direction) {
 //                case this.swipe.DIRECTION_LEFT:
-//                case this.swipe.DIRECTION_RIGHT:
+                case this.swipe.DIRECTION_RIGHT:
 //                case this.swipe.DIRECTION_UP:
 //                case this.swipe.DIRECTION_DOWN:
 //                case this.swipe.DIRECTION_UP_LEFT:
                 case this.swipe.DIRECTION_UP_RIGHT:
                     console.log("up right");
+                    this.attack();
                     break;
 //                case this.swipe.DIRECTION_DOWN_LEFT:
 //                case this.swipe.DIRECTION_DOWN_RIGHT:
@@ -90,8 +98,24 @@ var gameState = {
         if(this.lives.value==0){
             this.enemies.destroy();
             this.hero.destroy();
-            game.time.events.add(Phaser.Timer.SECOND * 2, function(){game.state.start("gameover")}, this);
+            game.time.events.add(Phaser.Timer.SECOND * 0.1, function(){game.state.start("gameover")}, this);
         }
+    },
+
+    weaponHitCollisionHandler: function(weapon,enemy){
+            enemy.kill();
+            this.score.label.setText("Score: "+ScoreService.addPoints(10));
+    },
+
+    attack: function(){
+        this.isAttacking=true;
+        this.weapon.visible=true
+        game.physics.arcade.enable(this.weapon);
+        game.time.events.add(Phaser.Timer.SECOND * 0.5, function(){
+            this.isAttacking=false;
+            this.weapon.visible=false
+            this.weapon.enable=false;
+        }, this);
     }
 
     //heroInputListener: function(){

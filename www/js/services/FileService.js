@@ -89,7 +89,6 @@ var FileService = {
                 fileEntry.createWriter(function (fileWriter) {
 
                     fileWriter.onwriteend = function() {
-
                         def.resolve();
                     };
 
