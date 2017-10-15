@@ -3,15 +3,14 @@ var gameState = {
     inputArea:null,
     swipe:null,
     hero:null,
-    enemies:{
-        count:0
-    },
+    enemies:null,
+    enemySpawnTimer:null,
     score:{
         value: 0,
         label: null
     },
     lives:{
-        value: 3,
+        value: 0,
         label: null
     },
 
@@ -19,9 +18,6 @@ var gameState = {
 
         this.swipe = new Swipe(game);
         game.physics.startSystem(Phaser.Physics.ARCADE);
-
-        this.score.label = game.add.text(10,10,"Score: 0",{font: "20px Courier", fill:"#ffff00"});
-        this.lives.label = game.add.text(10,30,"Lives: "+Array(this.lives.value+1).join("♥"),{font: "20px Courier", fill:"#ff0000"});
 
         this.inputArea = new Phaser.Rectangle(0, deviceHeight-(deviceHeight/5), deviceWidth, deviceHeight);
 
@@ -32,15 +28,19 @@ var gameState = {
         this.hero.body.collideWorldBounds=true;
         //this.hero.events.onInputDown.add(this.heroInputListener, this);
 
+        this.enemies = game.add.group();
+        this.enemySpawnTimer = game.time.events.loop(Phaser.Timer.SECOND * 1, this.addEnemy, this);
 
+        this.score.value = 0;
+        this.lives.value = 3;
 
+        this.score.label = game.add.text(10,10,"Score: 0",{font: "20px Courier", fill:"#ffff00"});
+        this.lives.label = game.add.text(10,30,"Lives: "+Array(this.lives.value+1).join("♥"),{font: "20px Courier", fill:"#ff0000"});
     },
 
     update: function(){
 
-        if(this.enemies.count<5){
-            this.addEnemey();
-        }
+        game.physics.arcade.overlap(this.hero, this.enemies, this.enemyCollisionHandler, null, this);
 
         //check if pointer is in control area
         if(game.input.activePointer.isDown&&game.input.activePointer.y>deviceHeight-(deviceHeight/5)){
@@ -76,24 +76,22 @@ var gameState = {
         game.debug.geom(this.inputArea,'#0fffff');
     },
 
-    addEnemey: function(){
+    addEnemy: function(){
 
-        var randomX = Math.floor(Math.random() * deviceWidth) + 1;
-        var currentEnemy = game.add.sprite(randomX, 0, "enemy");
-        game.physics.arcade.enable(currentEnemy);
-        currentEnemy.body.velocity.y = 100;
-        currentEnemy.body.setSize(32, 32, 0, 0);
-        currentEnemy.body.mass = 0;
+        this.enemies.add(new Enemy(game));
 
-        game.physics.arcade.collide(currentEnemy, this.hero, this.enemyCollisionHandler, null, this);
 
-        this.enemies.count++;
     },
 
-    enemyCollisionHandler: function(enemy,hero){
-        console.log("destroy",enemy);
-        enemy.destroy();
-        this.enemies.count--;
+    enemyCollisionHandler: function(hero,enemy){
+        enemy.kill();
+        this.lives.value-=1;
+        this.lives.label.setText("Lives: "+Array(this.lives.value+1).join("♥"));
+        if(this.lives.value==0){
+            this.enemies.destroy();
+            this.hero.destroy();
+            game.time.events.add(Phaser.Timer.SECOND * 2, function(){game.state.start("gameover")}, this);
+        }
     }
 
     //heroInputListener: function(){
