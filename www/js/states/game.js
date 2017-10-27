@@ -8,6 +8,8 @@ var gameState = {
     attackIsDelayed:false,
     enemies:null,
     enemySpawnTimer:null,
+    coolDownBar: null,
+    cooldown: 1,
     score:{
         value: 0,
         label: null
@@ -16,8 +18,22 @@ var gameState = {
         value: 0,
         label: null
     },
+    gold:{
+        value: 0,
+        label: null
+    },
+    background:{
+        maxHorizontalTiles: 0,
+        maxVerticalTiles: 0,
+        tileRows: []
+    },
 
     create: function(){
+
+        this.background.maxHorizontalTiles = Math.floor(deviceWidth/32);
+        this.background.maxVerticalTiles = Math.floor(deviceHeight/32);
+
+        console.log(deviceHeight,deviceWidth,this.background)
 
         this.swipe = new Swipe(game);
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -39,25 +55,57 @@ var gameState = {
         this.enemies = game.add.group();
         this.enemySpawnTimer = game.time.events.loop(Phaser.Timer.SECOND * 1, this.addEnemy, this);
 
+        this.goldcoins = game.add.group();
+        this.goldSpawnTimer = game.time.events.loop(Phaser.Timer.SECOND * 3, this.addGold, this);
+
         ScoreService.setLatestScore(0);
         this.score.value = 0;
         this.lives.value = HeroService.getMaxHealth();
+        this.gold.value = 0;
 
-        this.score.label = game.add.text(10,10,"Score: 0",{font: "20px Courier", fill:"#ffff00"});
+        this.score.label = game.add.text(10,10,"Score: 0",{font: "20px Courier", fill:"#00ff00"});
+        this.gold.label = game.add.text(deviceWidth/2,10,"Gold: 0",{font: "20px Courier", fill:"#ffff00"});
         this.lives.label = game.add.text(10,30,"Lives: "+Array(this.lives.value+1).join("♥"),{font: "20px Courier", fill:"#ff0000"});
 
         // fixes attacking not possible after restart game bug?
         this.isAttacking=false;
+        this.attackIsDelayed=false;
+        this.coolDownBar = game.add.text(deviceWidth/2,30,"IIIIIIIIII",{font: "20px Courier", fill:"#FFFFFF"});
+
+        for(i=0;i<this.background.maxVerticalTiles;i++){
+            var row = [];
+            for(var j=0;j<this.background.maxHorizontalTiles;j++){
+                row.push(game.rnd.between(1,4));
+            }
+            this.background.tileRows[i].push(row)
+        }
+
+        for(var x=0;x<this.background.maxVerticalTiles;x++){
+            for(var y=0;y<this.background.maxHorizontalTiles;y++){
+                var sprite = game.add.sprite(x*32,y*32,"floor");
+                sprite.frame=this.background[x][y];
+            }
+        }
+
     },
 
     update: function(){
+
+//        for(var x=0;x<this.background.maxVerticalTiles;x++){
+//            for(var y=0;y<this.background.maxHorizonalTiles;y++){
+//
+//            }
+//        }
 
         // Collision
 
         game.physics.arcade.overlap(this.hero, this.enemies, this.enemyCollisionHandler, null, this);
         game.physics.arcade.overlap(this.weapon, this.enemies, this.weaponHitCollisionHandler, null, this);
+        game.physics.arcade.overlap(this.hero, this.goldcoins, this.goldCollisionHandler, null, this);
 
+        if(this.attackIsDelayed){
 
+        }
 
         // Controls
         if(game.input.activePointer.isDown&&game.input.activePointer.y>deviceHeight-(deviceHeight/5)){
@@ -101,6 +149,13 @@ var gameState = {
 
     },
 
+    addGold: function(){
+
+            this.goldcoins.add(new Gold(game));
+
+
+    },
+
     enemyCollisionHandler: function(hero,enemy){
         enemy.kill();
         this.lives.value-=1;
@@ -113,11 +168,25 @@ var gameState = {
     },
 
     weaponHitCollisionHandler: function(weapon,enemy){
-            enemy.kill();
-            this.score.label.setText("Score: "+ScoreService.addPoints(10));
+            if(!this.attackIsDelayed){
+                enemy.kill();
+                this.score.label.setText("Score: "+ScoreService.addPoints(10));
+            }
+    },
+
+    goldCollisionHandler: function(hero,gold){
+        gold.kill();
+        this.gold.value+=1;
+        this.gold.label.setText("Gold: "+this.gold.value);
     },
 
     attack: function(){
+
+        var stepDuration = 10/HeroService.getAttackDuration();
+        var remainingSteps = 10;
+
+//        console.log(steps);
+
         if(this.attackIsDelayed==true)return;
         this.isAttacking=true;
         this.weapon.visible=true
@@ -127,8 +196,18 @@ var gameState = {
             this.weapon.visible=false
             this.weapon.enable=false;
             this.attackIsDelayed=true;
+            this.cooldown = Phaser.Timer.SECOND * HeroService.getAttackDelay();
+
+            for(var i=1;i<=10;i++){
+                game.time.events.add(stepDuration*i,function(){
+                    remainingSteps--;
+                    this.coolDownBar.setText(Array(10-remainingSteps).join("I"));
+                },this)
+            }
+
             game.time.events.add(Phaser.Timer.SECOND * HeroService.getAttackDelay(), function(){
                 this.attackIsDelayed=false;
+                this.coolDownBar.setText("")
             },this);
         }, this);
     }

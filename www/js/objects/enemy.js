@@ -1,7 +1,7 @@
 Enemy = function (game) {
 
-    var x = game.rnd.between(16, deviceWidth-16);
-    var y = 0
+    var x = game.rnd.between(32, deviceWidth-32);
+    var y = 40;
 
     Phaser.Sprite.call(this, game, x, y, 'enemy');
 
