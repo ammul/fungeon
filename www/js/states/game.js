@@ -22,18 +22,8 @@ var gameState = {
         value: 0,
         label: null
     },
-    background:{
-        maxHorizontalTiles: 0,
-        maxVerticalTiles: 0,
-        tileRows: []
-    },
 
     create: function(){
-
-        this.background.maxHorizontalTiles = Math.floor(deviceWidth/32);
-        this.background.maxVerticalTiles = Math.floor(deviceHeight/32);
-
-        console.log(deviceHeight,deviceWidth,this.background)
 
         this.swipe = new Swipe(game);
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -71,31 +61,9 @@ var gameState = {
         this.isAttacking=false;
         this.attackIsDelayed=false;
         this.coolDownBar = game.add.text(deviceWidth/2,30,"IIIIIIIIII",{font: "20px Courier", fill:"#FFFFFF"});
-
-        for(i=0;i<this.background.maxVerticalTiles;i++){
-            var row = [];
-            for(var j=0;j<this.background.maxHorizontalTiles;j++){
-                row.push(game.rnd.between(1,4));
-            }
-            this.background.tileRows[i].push(row)
-        }
-
-        for(var x=0;x<this.background.maxVerticalTiles;x++){
-            for(var y=0;y<this.background.maxHorizontalTiles;y++){
-                var sprite = game.add.sprite(x*32,y*32,"floor");
-                sprite.frame=this.background[x][y];
-            }
-        }
-
     },
 
     update: function(){
-
-//        for(var x=0;x<this.background.maxVerticalTiles;x++){
-//            for(var y=0;y<this.background.maxHorizonalTiles;y++){
-//
-//            }
-//        }
 
         // Collision
 
@@ -182,7 +150,7 @@ var gameState = {
 
     attack: function(){
 
-        var stepDuration = 10/HeroService.getAttackDuration();
+        var stepDuration = HeroService.getAttackDelay()/10;
         var remainingSteps = 10;
 
 //        console.log(steps);
@@ -199,15 +167,15 @@ var gameState = {
             this.cooldown = Phaser.Timer.SECOND * HeroService.getAttackDelay();
 
             for(var i=1;i<=10;i++){
-                game.time.events.add(stepDuration*i,function(){
+                game.time.events.add(Phaser.Timer.SECOND * stepDuration*i,function(){
                     remainingSteps--;
-                    this.coolDownBar.setText(Array(10-remainingSteps).join("I"));
+                    this.coolDownBar.setText(Array(11-remainingSteps).join("I"));
                 },this)
             }
 
             game.time.events.add(Phaser.Timer.SECOND * HeroService.getAttackDelay(), function(){
                 this.attackIsDelayed=false;
-                this.coolDownBar.setText("")
+                this.coolDownBar.setText("IIIIIIIIII")
             },this);
         }, this);
     }
