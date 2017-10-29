@@ -23,9 +23,11 @@ var GoldService = {
     addGold: function(gold){
         this.storedGold+=gold
         FileService.overwriteFile("gold.txt",this.storedGold);
+        console.log("new stored gold",this.storedGold)
         return this.storedGold;
     },
     removeGold: function(amount){
+        console.log("remove ",amount)
         if(amount<=this.storedGold){
             this.storedGold-=amount
             FileService.overwriteFile("gold.txt",this.storedGold);

@@ -1,10 +1,6 @@
 var HeroService = {
 
-    maxHealth: 3,
-    currentHealth: 3,
-    attackDuration: 0.5,
-    attackDelay: 3.0,
-    movementSpeed: 3,
+    stats: {},
 
     hero: null,
 
@@ -15,6 +11,9 @@ var HeroService = {
         this.hero.inputEnabled = true;
         this.hero.body.collideWorldBounds=true;
         this.hero.addChild(AttackService.weapon);
+
+        this.currentHealth = this.maxHealth
+
     },
 
     getMaxHealth: function(){

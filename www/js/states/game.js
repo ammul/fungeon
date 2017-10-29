@@ -24,8 +24,8 @@ var gameState = {
         GameGuiService.initBackgrounds()
         SpawnTimerService.init()
         AttackService.init()
-        GameGuiService.initGui()
         HeroService.init()
+        GameGuiService.initGui()
 
     },
 
@@ -55,9 +55,11 @@ var gameState = {
 
     enemyCollisionHandler: function(hero,enemy){
         enemy.kill()
-        HeroService.currentHealth-=1
-        GameGuiService.labels.lives.setText("Lives: "+Array(HeroService.currentHealth+1).join("♥"))
+        HeroService.currentHealth = HeroService.currentHealth - 1
+        console.log(HeroService.currentHealth)
+        GameGuiService.labels.lives.setText("Health: "+Array(HeroService.currentHealth+1).join("♥"))
         if(HeroService.currentHealth==0){
+            console.log("adding "+GoldService.getNewGoldSum())
             GoldService.addGold(GoldService.getNewGoldSum())
             SpawnTimerService.enemies.destroy()
             SpawnTimerService.goldCoins.destroy()

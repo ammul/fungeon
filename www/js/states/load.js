@@ -8,6 +8,7 @@ var loadState = {
         game.load.spritesheet("arrow_left_button","assets/gui/arrow_button_left.png",64,64,2);
         game.load.spritesheet("arrow_right_button","assets/gui/arrow_button_right.png",64,64,2);
         game.load.spritesheet("attack_button","assets/gui/attack_button.png",64,64,2);
+        game.load.spritesheet("skill_plus_button","assets/gui/skill_plus_button.png",64,64,2);
         game.load.spritesheet("blank_button","assets/gui/blank_button.png",64,64,2);
 
         game.load.image('blank', 'assets/gui/blank.png');
@@ -55,11 +56,16 @@ var loadState = {
                      FileService.overwriteFile(file,"0")
                      switch(file){
                          case 'score.txt':
+                            FileService.overwriteFile(file,"0")
                              ScoreService.setHighScore(0)
                          break
                          case 'gold.txt':
-                             GoldService.setStoredGold(0)
+                            FileService.overwriteFile(file,"0")
+                            GoldService.setStoredGold(0)
                          break
+                         case 'stats.txt':
+
+                         break;
                       }
                      def.resolve()
                  });
@@ -72,7 +78,9 @@ var loadState = {
 
         createOrReadFile("score.txt").then(function(){
             createOrReadFile("gold.txt").then(function(){
-                game.state.start("menu");
+                createOrReadFile("stats.txt").then(function(){
+                    game.state.start("menu");
+                })
             })
         })
 
@@ -81,3 +89,11 @@ var loadState = {
 
 
 }
+
+initialStats =     {
+        maxHealth: 3,
+        currentHealth: 3,
+        attackDuration: 0.5,
+        attackDelay: 3.0,
+        movementSpeed: 3,
+    }
