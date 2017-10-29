@@ -21,6 +21,7 @@ function onDeviceReady() {
     game.state.add('menu',menuState);
     game.state.add('game',gameState);
     game.state.add('gameover',gameOverState);
+    game.state.add('upgrades',upgradesState);
 
     // run boot state
     game.state.start('boot');

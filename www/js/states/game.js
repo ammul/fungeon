@@ -19,8 +19,14 @@ var gameState = {
         label: null
     },
     gold:{
-        value: 0,
         label: null
+    },
+    backgroundTileSprite: null,
+    buttons: {
+        left: null,
+        right: null,
+        attack: null,
+        blank: null
     },
 
     create: function(){
@@ -28,9 +34,11 @@ var gameState = {
         this.swipe = new Swipe(game);
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
+        this.backgroundTileSprite = game.add.tileSprite(0, 0, deviceWidth, deviceHeight, 'floor');
+
         this.inputArea = new Phaser.Rectangle(0, deviceHeight-(deviceHeight/5), deviceWidth, deviceHeight);
 
-        this.hero = game.add.sprite(deviceWidth/2, (deviceHeight-(deviceHeight/5)-50), "hero");
+        this.hero = game.add.sprite(deviceWidth/2, (deviceHeight-(deviceHeight/7)-50), "hero");
         this.hero.anchor.set(0.5);
         game.physics.arcade.enable(this.hero);
         this.hero.inputEnabled = true;
@@ -61,9 +69,25 @@ var gameState = {
         this.isAttacking=false;
         this.attackIsDelayed=false;
         this.coolDownBar = game.add.text(deviceWidth/2,30,"IIIIIIIIII",{font: "20px Courier", fill:"#FFFFFF"});
+
+        this.buttons.left = game.add.button(0, deviceHeight-(deviceHeight/7), 'arrow_left_button', function(){}, this, 0,0,1,0);
+        this.buttons.left.height = deviceHeight/7;
+        this.buttons.left.width = deviceWidth/4;
+        this.buttons.right = game.add.button((deviceWidth/2)+(deviceWidth/4), deviceHeight-(deviceHeight/7), 'arrow_right_button', function(){}, this, 0,0,1,0);
+        this.buttons.right.height = deviceHeight/7;
+        this.buttons.right.width = deviceWidth/4;
+        this.buttons.attack = game.add.button((deviceWidth/2), deviceHeight-(deviceHeight/7), 'attack_button', this.attack, this, 0,0,1,0);
+        this.buttons.attack.height = deviceHeight/7;
+        this.buttons.attack.width = deviceWidth/4;
+
+        this.buttons.blank = game.add.button((deviceWidth/4), deviceHeight-(deviceHeight/7), 'blank_button', function(){}, this, 0,0,1,0);
+        this.buttons.blank.height = deviceHeight/7;
+        this.buttons.blank.width = deviceWidth/4;
     },
 
     update: function(){
+
+        this.backgroundTileSprite.tilePosition.y += 1;
 
         // Collision
 
@@ -76,38 +100,38 @@ var gameState = {
         }
 
         // Controls
-        if(game.input.activePointer.isDown&&game.input.activePointer.y>deviceHeight-(deviceHeight/5)){
+        if(game.input.activePointer.isDown&&game.input.activePointer.y>deviceHeight-(deviceHeight/7)){
 
-            if(game.input.activePointer.x<deviceWidth/2){
-                this.hero.x-=7;
-            }else if(game.input.activePointer.x>=deviceWidth/2){
-                this.hero.x+=7;
+            if(game.input.activePointer.x<deviceWidth/4){
+                this.hero.x-=HeroService.getMovementSpeed();
+            }else if(game.input.activePointer.x>=((deviceWidth/2)+(deviceWidth/4))){
+                this.hero.x+=HeroService.getMovementSpeed();
             }
 
         }
 
         var direction = this.swipe.check();
-        if (direction!==null&&!this.isAttacking) {
-            // direction= { x: x, y: y, direction: direction }
-            switch(direction.direction) {
-//                case this.swipe.DIRECTION_LEFT:
-                case this.swipe.DIRECTION_RIGHT:
-//                case this.swipe.DIRECTION_UP:
-//                case this.swipe.DIRECTION_DOWN:
-//                case this.swipe.DIRECTION_UP_LEFT:
-                case this.swipe.DIRECTION_UP_RIGHT:
-                    console.log("up right");
-                    this.attack();
-                    break;
-//                case this.swipe.DIRECTION_DOWN_LEFT:
-//                case this.swipe.DIRECTION_DOWN_RIGHT:
-            }
-        }
+//        if (direction!==null&&!this.isAttacking) {
+//            // direction= { x: x, y: y, direction: direction }
+//            switch(direction.direction) {
+////                case this.swipe.DIRECTION_LEFT:
+//                case this.swipe.DIRECTION_RIGHT:
+////                case this.swipe.DIRECTION_UP:
+////                case this.swipe.DIRECTION_DOWN:
+////                case this.swipe.DIRECTION_UP_LEFT:
+//                case this.swipe.DIRECTION_UP_RIGHT:
+//                    console.log("up right");
+//                    this.attack();
+//                    break;
+////                case this.swipe.DIRECTION_DOWN_LEFT:
+////                case this.swipe.DIRECTION_DOWN_RIGHT:
+//            }
+//        }
 
     },
 
     render: function(){
-        game.debug.geom(this.inputArea,'#0fffff');
+//        game.debug.geom(this.inputArea,'#0fffff');
     },
 
     addEnemy: function(){
@@ -121,17 +145,17 @@ var gameState = {
 
             this.goldcoins.add(new Gold(game));
 
-
     },
 
     enemyCollisionHandler: function(hero,enemy){
-        enemy.kill();
-        this.lives.value-=1;
-        this.lives.label.setText("Lives: "+Array(this.lives.value+1).join("♥"));
+        enemy.kill()
+        this.lives.value-=1
+        this.lives.label.setText("Lives: "+Array(this.lives.value+1).join("♥"))
         if(this.lives.value==0){
-            this.enemies.destroy();
-            this.hero.destroy();
-            game.time.events.add(Phaser.Timer.SECOND * 0.1, function(){game.state.start("gameover")}, this);
+            GoldService.addGold(GoldService.getNewGoldSum())
+            this.enemies.destroy()
+            this.hero.destroy()
+            game.time.events.add(Phaser.Timer.SECOND * 0.1, function(){game.state.start("gameover")}, this)
         }
     },
 
@@ -143,9 +167,9 @@ var gameState = {
     },
 
     goldCollisionHandler: function(hero,gold){
-        gold.kill();
-        this.gold.value+=1;
-        this.gold.label.setText("Gold: "+this.gold.value);
+        gold.kill()
+        GoldService.addToNewGoldSum(1)
+        this.gold.label.setText("Gold: "+GoldService.getNewGoldSum())
     },
 
     attack: function(){

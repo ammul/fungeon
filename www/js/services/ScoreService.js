@@ -4,11 +4,12 @@ var ScoreService = {
     highScore: 0,
 
     setHighScore: function(score){
+        console.log("ScoreService.setHighScore",score)
         this.highScore = score;
     },
 
     getHighScore: function(){
-        console.log("returned",this.highScore);
+        console.log("ScoreService.getHighScore",this.highScore);
         return this.highScore;
     },
     setLatestScore: function(score){

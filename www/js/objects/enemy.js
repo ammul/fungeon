@@ -3,7 +3,7 @@ Enemy = function (game) {
     var x = game.rnd.between(32, deviceWidth-32);
     var y = 40;
 
-    Phaser.Sprite.call(this, game, x, y, 'enemy');
+    Phaser.Sprite.call(this, game, x, y, 'goblin');
 
     game.physics.arcade.enable(this);
 
