@@ -34,6 +34,11 @@ var GoldService = {
 
         return false
 
+    },
+    goldCollisionHandler: function(hero,gold){
+        gold.kill()
+        GoldService.addToNewGoldSum(1)
+        GameGuiService.labels.gold.setText("Gold: "+GoldService.getNewGoldSum())
     }
 
 

@@ -10,6 +10,8 @@ var loadState = {
         game.load.spritesheet("attack_button","assets/gui/attack_button.png",64,64,2);
         game.load.spritesheet("blank_button","assets/gui/blank_button.png",64,64,2);
 
+        game.load.image('blank', 'assets/gui/blank.png');
+
         game.load.image('floor', 'assets/game/floor.jpg');
 
         game.load.spritesheet("fungeon","assets/game/fungeon_32x32.png",32,32,20);
