@@ -11,6 +11,7 @@ var AttackService = {
         this.weapon = game.add.sprite(16,-40, 'sword')
         game.physics.arcade.enable(this.weapon)
         this.weapon.visible = false
+        this.weapon.enable=false
     },
 
     attack: function(){

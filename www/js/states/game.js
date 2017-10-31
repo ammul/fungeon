@@ -55,7 +55,10 @@ var gameState = {
 
     enemyCollisionHandler: function(hero,enemy){
         enemy.kill()
-        HeroService.setCurrentHealth(HeroService.getCurrentHealth() - 1)
+        console.log("before",HeroService.getCurrentHealth())
+        var newCurrentHealth = HeroService.getCurrentHealth() - 1
+        HeroService.setCurrentHealth(newCurrentHealth)
+        console.log("after",HeroService.getCurrentHealth())
         GameGuiService.labels.lives.setText("Health: "+Array(HeroService.getCurrentHealth()+1).join("♥"))
         if(HeroService.getCurrentHealth()==0){
             console.log("adding "+GoldService.getNewGoldSum())

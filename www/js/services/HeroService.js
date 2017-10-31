@@ -19,7 +19,7 @@ var HeroService = {
         this.hero.body.collideWorldBounds=true;
         this.hero.addChild(AttackService.weapon);
 
-        this.currentHealth = this.maxHealth
+        this.current.currentHealth = this.current.maxHealth
 
     },
 

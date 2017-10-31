@@ -127,9 +127,9 @@ var upgradesState = {
             currentUpgrade.labels.subHeaderStep = game.add.text(deviceWidth/7,80+5+((i+1)*80),"+ "+currentUpgrade.step+currentUpgrade.unit,{font: "20px Courier", fill:"#ffffff"});
             currentUpgrade.labels.subHeaderGold = game.add.text(100+deviceWidth/7,80+5+((i+1)*80),currentUpgrade.cost+" Gold",{font: "20px Courier", fill:"#ffff00"});
 
-            currentUpgrade.button = game.add.button(deviceWidth-(deviceWidth/5)-10,80+5+((i+1)*80), 'skill_plus_button', buyUpgrade.bind(this, currentUpgrade), this, 0,0,1,0);
-            currentUpgrade.button.height = 48
-            currentUpgrade.button.width = 48
+            currentUpgrade.button = game.add.button(10+deviceWidth-(deviceWidth/5)-10,80+5+((i+1)*80), 'skill_plus_button', buyUpgrade.bind(this, currentUpgrade), this, 0,0,1,0);
+            currentUpgrade.button.height = 32
+            currentUpgrade.button.width = 32
         }
 
         var backToMenuButton = game.add.button(deviceWidth/4, deviceHeight-100, 'gui_button', backToMenu, this, 0,0,1,0);

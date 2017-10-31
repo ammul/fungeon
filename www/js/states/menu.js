@@ -11,7 +11,7 @@ var menuState = {
         var upgradesGameButton;
         var upgradesGameLabel;
 
-        var nameLabel = game.add.text(deviceWidth/4,100,"FUNGEON RUN",{font: "40px Courier", fill:"#ff0000"});
+        var nameLabel = game.add.text(deviceWidth/6,100,"FUNGEON RUN",{font: "40px Courier", fill:"#ff0000"});
         this.scoreLabel = game.add.text(deviceWidth/4,140,"Highscore:",{font: "20px Courier", fill:"#ffff00"});
 
         startGameButton = game.add.button(deviceWidth/4, 250, 'gui_button', startGame, this, 0,0,1,0);
