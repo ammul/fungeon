@@ -22,7 +22,7 @@ var upgradesState = {
                     subHeaderStep: null,
                     subHeaderGold: null
                 },
-                current: HeroService.attackDuration,
+                current: HeroService.getAttackDuration(),
                 button: null
             },
             {
@@ -37,7 +37,7 @@ var upgradesState = {
                     subHeaderStep: null,
                     subHeaderGold: null
                 },
-                current: HeroService.attackDelay,
+                current: HeroService.getAttackDelay(),
                 button: null
             },
             {
@@ -52,7 +52,7 @@ var upgradesState = {
                     subHeaderStep: null,
                     subHeaderGold: null
                 },
-                current: HeroService.movementSpeed,
+                current: HeroService.getMovementSpeed(),
                 button: null
             },
             {
@@ -67,7 +67,7 @@ var upgradesState = {
                     subHeaderStep: null,
                     subHeaderGold: null
                 },
-                current: HeroService.maxHealth,
+                current: HeroService.getMaxHealth(),
                 button: null
             },
 
@@ -84,26 +84,36 @@ var upgradesState = {
             switch(upgrade.name){
 
                 case 'attack-delay':
-                    HeroService.attackDelay-=upgrade.step
-                    upgrade.labels.headerRight.setText(HeroService.attackDelay+upgrade.unit)
+                    var newValue = HeroService.getAttackDelay()
+                    newValue-=upgrade.step
+                    HeroService.setAttackDelay(newValue)
+                    upgrade.labels.headerRight.setText(HeroService.getAttackDelay()+upgrade.unit)
                 break
 
                 case 'attack-duration':
-                    HeroService.attackDuration-=upgrade.step
-                    upgrade.labels.headerRight.setText(HeroService.attackDuration+upgrade.unit)
+                    var newValue = HeroService.getAttackDuration()
+                    newValue-=upgrade.step
+                    HeroService.setAttackDuration(newValue)
+                    upgrade.labels.headerRight.setText(HeroService.getAttackDuration()+upgrade.unit)
                 break
 
                 case 'movement-speed':
-                    HeroService.movementSpeed-=upgrade.step
-                    upgrade.labels.headerRight.setText(HeroService.movementSpeed+upgrade.unit)
+                    var newValue = HeroService.getMovementSpeed()
+                    newValue+=upgrade.step
+                    HeroService.setMovementSpeed(newValue)
+                    upgrade.labels.headerRight.setText(HeroService.getMovementSpeed()+upgrade.unit)
                 break
 
                 case 'max-health':
-                    HeroService.maxHealth-=upgrade.step
-                    upgrade.labels.headerRight.setText(HeroService.maxHealth+upgrade.unit)
+                    var newValue = HeroService.getMaxHealth()
+                    newValue+=upgrade.step
+                    HeroService.setMaxHealth(newValue)
+                    upgrade.labels.headerRight.setText(HeroService.getMaxHealth()+upgrade.unit)
                 break
 
             }
+
+            FileService.overwriteFile("stats.txt",JSON.stringify(HeroService.getCurrentStats()))
 
         }
 

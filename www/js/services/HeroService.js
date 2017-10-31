@@ -1,6 +1,13 @@
 var HeroService = {
 
-    stats: {},
+    initial: {
+        maxHealth: 3,
+        currentHealth: 3,
+        attackDuration: 0.5,
+        attackDelay: 3.0,
+        movementSpeed: 3,
+    },
+    current: {},
 
     hero: null,
 
@@ -17,15 +24,42 @@ var HeroService = {
     },
 
     getMaxHealth: function(){
-        return this.maxHealth;
+        return this.current.maxHealth
+    },
+    setMaxHealth: function(value){
+        this.current.maxHealth = value
+    },
+    getCurrentHealth: function(){
+        return this.current.currentHealth
+    },
+    setCurrentHealth: function(value){
+        this.current.currentHealth = value
     },
     getAttackDuration: function(){
-        return this.attackDuration
+        return this.current.attackDuration
+    },
+    setAttackDuration: function(value){
+        this.current.attackDuration = value
     },
     getAttackDelay: function(){
-        return this.attackDelay
+        return this.current.attackDelay
+    },
+    setAttackDelay: function(value){
+        this.current.attackDelay = value
     },
     getMovementSpeed: function(){
-        return this.movementSpeed
+        return this.current.movementSpeed
+    },
+    setMovementSpeed: function(value){
+        this.current.movementSpeed = value
+    },
+    getInitialStats: function(){
+        return this.initial
+    },
+    setCurrentStats: function(stats){
+        this.current = stats
+    },
+    getCurrentStats: function(stats){
+        return this.current
     }
 }

@@ -55,10 +55,9 @@ var gameState = {
 
     enemyCollisionHandler: function(hero,enemy){
         enemy.kill()
-        HeroService.currentHealth = HeroService.currentHealth - 1
-        console.log(HeroService.currentHealth)
-        GameGuiService.labels.lives.setText("Health: "+Array(HeroService.currentHealth+1).join("♥"))
-        if(HeroService.currentHealth==0){
+        HeroService.setCurrentHealth(HeroService.getCurrentHealth() - 1)
+        GameGuiService.labels.lives.setText("Health: "+Array(HeroService.getCurrentHealth()+1).join("♥"))
+        if(HeroService.getCurrentHealth()==0){
             console.log("adding "+GoldService.getNewGoldSum())
             GoldService.addGold(GoldService.getNewGoldSum())
             SpawnTimerService.enemies.destroy()

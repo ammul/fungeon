@@ -35,14 +35,19 @@ var loadState = {
              FileService.checkIfFileExists(file).then(function(){
 
                  FileService.readFile(file).then(function(value){
-                     console.log("file "+file+" does exist, value:",value)
+                     console.log("file >"+file+"< does exist")
+                     console.log(value)
                      switch(file){
                         case 'score.txt':
                             ScoreService.setHighScore(parseInt(value))
-                        break
+                            break;
                         case 'gold.txt':
                             GoldService.setStoredGold(parseInt(value))
-                        break
+                            break;
+                        case 'stats.txt':
+                            console.log(value,JSON.parse(value))
+                            HeroService.setCurrentStats(JSON.parse(value))
+                            break;
                      }
                      def.resolve()
                  });
@@ -56,16 +61,19 @@ var loadState = {
                      FileService.overwriteFile(file,"0")
                      switch(file){
                          case 'score.txt':
-                            FileService.overwriteFile(file,"0")
-                             ScoreService.setHighScore(0)
-                         break
+                            FileService.overwriteFile('score.txt',"0")
+                            ScoreService.setHighScore(0)
+                            break;
                          case 'gold.txt':
-                            FileService.overwriteFile(file,"0")
+                            FileService.overwriteFile('gold.txt',"0")
                             GoldService.setStoredGold(0)
-                         break
+                            break;
                          case 'stats.txt':
-
-                         break;
+                            var json = JSON.stringify(HeroService.getInitialStats())
+                            console.log("writing",json)
+                            FileService.overwriteFile('stats.txt',json)
+                            HeroService.setCurrentStats(HeroService.getInitialStats())
+                            break;
                       }
                      def.resolve()
                  });
@@ -86,14 +94,4 @@ var loadState = {
 
     },
 
-
-
 }
-
-initialStats =     {
-        maxHealth: 3,
-        currentHealth: 3,
-        attackDuration: 0.5,
-        attackDelay: 3.0,
-        movementSpeed: 3,
-    }
