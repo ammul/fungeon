@@ -26,6 +26,7 @@ var gameState = {
         AttackService.init()
         HeroService.init()
         GameGuiService.initGui()
+        GameLevelService.init()
 
     },
 

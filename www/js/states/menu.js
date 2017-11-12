@@ -28,7 +28,7 @@ var menuState = {
 
         function startGame(){
 
-            game.state.start("game");
+            game.state.start("stage");
 
         }
 

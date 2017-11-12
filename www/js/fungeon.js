@@ -20,6 +20,7 @@ function onDeviceReady() {
     game.state.add('load',loadState);
     game.state.add('menu',menuState);
     game.state.add('game',gameState);
+    game.state.add('stage',stageState);
     game.state.add('gameover',gameOverState);
     game.state.add('upgrades',upgradesState);
 
