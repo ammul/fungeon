@@ -13,21 +13,24 @@ var GameLevelService = {
             name: "entrance",
             caption: "Fungeon Entrance",
             subcaption: "Level 1",
-            duration: 18
+            duration: 90,
+            enemy: "skeleton"
         },
         {
             identifier: 1,
             name: "catacombs",
             caption: "The Catacombs",
             subcaption: "Level 2",
-            duration: 30
+            duration: 150,
+            enemy: "fighter"
         },
         {
             identifier: 2,
             name: "graveyard",
             caption: "The Graveyard",
             subcaption: "Level 3",
-            duration: 40
+            duration: 200,
+            enemy: "zombie"
         }
 
     ],

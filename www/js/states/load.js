@@ -21,7 +21,9 @@ var loadState = {
 //        game.load.spritesheet("floor","assets/game/floor_32x32.png",32,32,4);
         game.load.spritesheet("hero","assets/game/hero.png");
         game.load.spritesheet("sword","assets/game/sword.png");
-        game.load.spritesheet("goblin","assets/game/goblin.png");
+        game.load.spritesheet("zombie","assets/game/zombie.png");
+        game.load.spritesheet("skeleton","assets/game/skeleton.png");
+        game.load.spritesheet("fighter","assets/game/fighter.png");
         game.load.spritesheet("gold","assets/game/gold.png");
 
 

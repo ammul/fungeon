@@ -1,7 +1,7 @@
 Gold = function (game) {
 
     var x = game.rnd.between(16, deviceWidth-16);
-    var y = 40;
+    var y = 45;
 
     Phaser.Sprite.call(this, game, x, y, 'gold');
 

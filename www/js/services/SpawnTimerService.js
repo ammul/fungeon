@@ -25,7 +25,7 @@ var SpawnTimerService = {
 
     addEnemy: function(){
 
-        this.enemies.add(new Enemy(game))
+        this.enemies.add(new Enemy(game,GameLevelService.getCurrentLevel().enemy))
 
     }
 
