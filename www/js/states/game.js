@@ -9,7 +9,7 @@ var gameState = {
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
         // set background
-        this.backgroundTileSprite = game.add.tileSprite(0, 0, deviceWidth, deviceHeight, 'floor');
+        this.backgroundTileSprite = game.add.tileSprite(0, 0, deviceWidth, deviceHeight, GameLevelService.getCurrentFloor());
 
         // define input area
         this.inputArea = new Phaser.Rectangle(0, deviceHeight-(deviceHeight/5), deviceWidth, deviceHeight);
@@ -68,6 +68,8 @@ var gameState = {
             SpawnTimerService.goldCoins.destroy()
             HeroService.hero.destroy()
             game.time.events.add(Phaser.Timer.SECOND * 0.1, function(){game.state.start("gameover")}, this)
+            GameLevelService.setLevel(0)
+            GameLevelService.setCurrentProgress(0)
         }
     }
 

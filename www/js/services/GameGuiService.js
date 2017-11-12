@@ -34,9 +34,9 @@ var GameGuiService = {
 
     initLabels: function(){
 
-        this.labels.score = game.add.text(10,10,"Score: 0",{font: "20px Courier", fill:"#00ff00"});
-        this.labels.gold = game.add.text(deviceWidth/2,10,"Gold: 0",{font: "20px Courier", fill:"#ffff00"});
-        this.labels.lives = game.add.text(10,30,"Lives: "+Array(HeroService.getMaxHealth()+1).join("♥"),{font: "20px Courier", fill:"#ff0000"});
+        this.labels.score = game.add.text(10,10,"Score: 0",{font: "20px Silkscreen", fill:"#00ff00"});
+        this.labels.gold = game.add.text(deviceWidth/2,10,"Gold: 0",{font: "20px Silkscreen", fill:"#ffff00"});
+        this.labels.lives = game.add.text(10,30,"Lives: "+Array(HeroService.getMaxHealth()+1).join("♥"),{font: "20px Silkscreen", fill:"#ff0000"});
 
     },
 

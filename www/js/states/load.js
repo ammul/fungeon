@@ -2,7 +2,7 @@ var loadState = {
 
     preload: function(){
 
-        var loadingLabel = game.add.text(deviceWidth/4,100,"loading...",{font: "30px Courier", fill:"#ffffff"});
+        var loadingLabel = game.add.text(deviceWidth/4,100,"loading...",{font: "30px Silkscreen", fill:"#ffffff"});
 
         game.load.spritesheet("gui_button","assets/gui/button_spritesheet.png",230,60,2);
         game.load.spritesheet("arrow_left_button","assets/gui/arrow_button_left.png",64,64,2);
@@ -13,7 +13,9 @@ var loadState = {
 
         game.load.image('blank', 'assets/gui/blank.png');
 
-        game.load.image('floor', 'assets/game/floor.jpg');
+        game.load.image('entrance', 'assets/game/entrance.jpg');
+        game.load.image('catacombs', 'assets/game/catacombs.jpg');
+        game.load.image('graveyard', 'assets/game/graveyard.jpg');
 
         game.load.spritesheet("fungeon","assets/game/fungeon_32x32.png",32,32,20);
 //        game.load.spritesheet("floor","assets/game/floor_32x32.png",32,32,4);

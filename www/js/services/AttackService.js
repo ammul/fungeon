@@ -7,8 +7,8 @@ var AttackService = {
 
     init: function(){
         GameGuiService.buttons.attack = game.add.button((deviceWidth/2), deviceHeight-(deviceHeight/7), 'attack_button', this.attack, this, 0,0,1,0)
-//        this.coolDownBar = game.add.text(deviceWidth/2,30,"IIIIIIIIII",{font: "20px Courier", fill:"#FFFFFF"});
-        this.coolDownBar = game.add.text(deviceWidth/2,3000,"IIIIIIIIII",{font: "20px Courier", fill:"#FFFFFF"});
+//        this.coolDownBar = game.add.text(deviceWidth/2,30,"IIIIIIIIII",{font: "20px Silkscreen", fill:"#FFFFFF"});
+        this.coolDownBar = game.add.text(deviceWidth/2,3000,"IIIIIIIIII",{font: "20px Silkscreen", fill:"#FFFFFF"});
         this.weapon = game.add.sprite(16,-40, 'sword')
         game.physics.arcade.enable(this.weapon)
         this.weapon.visible = false

@@ -13,12 +13,12 @@ var GameLevelService = {
             name: "entrance",
             caption: "Fungeon Entrance",
             subcaption: "Level 1",
-            duration: 18,
+            duration: 18
         },
         {
             identifier: 1,
-            name: "jail",
-            caption: "The Jail",
+            name: "catacombs",
+            caption: "The Catacombs",
             subcaption: "Level 2",
             duration: 30
         },
@@ -34,7 +34,7 @@ var GameLevelService = {
 
     init: function() {
 
-        this.progressText = game.add.text(deviceWidth/2,30,"Stage: 0%",{font: "20px Courier", fill:"#FFFFFF"});
+        this.progressText = game.add.text(deviceWidth/2,30,"Stage: 0%",{font: "20px Silkscreen", fill:"#FFFFFF"});
         this.startTimer()
     },
 
@@ -78,7 +78,7 @@ var GameLevelService = {
     },
 
     getCurrentLevel: function(){
-    
+
         return this.levels[this.currentLevel]
 
     },
@@ -87,14 +87,26 @@ var GameLevelService = {
         return this.levels
     },
 
+    setLevel: function(lvl){
+        this.currentLevel = 0
+    },
+
+    setCurrentProgress(progress){
+        this.currentProgress = 0
+    },
+
     getNextLevelCaption: function(){
-        if(this.currentLevel==0) return "Now: "+this.levels[this.currentLevel].caption
-        return "Next Stage: "+this.levels[this.currentLevel].caption
+        return this.levels[this.currentLevel].caption
     },
 
     getStageStateHeading: function(){
-        if(this.currentLevel==0)return "Begin"
-        return "Stage Completed"
+        if(this.currentLevel==0)return "START GAME"
+        return "STAGE COMPLETED"
+    },
+
+    getCurrentFloor: function(){
+        console.log(this.levels,this.currentLevel)
+        return this.levels[this.currentLevel].name
     }
 
 }
