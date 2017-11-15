@@ -1,6 +1,7 @@
 var GameLevelService = {
 
-    currentLevel: 0,
+    nextLevel: -1,
+    currentLevel: -1,
     currentProgress: 0,
     timer: null,
 
@@ -10,25 +11,28 @@ var GameLevelService = {
 
         {
             identifier: 0,
-            name: "entrance",
-            caption: "Fungeon Entrance",
-            subcaption: "Level 1",
+            name: "graveyard",
+            caption: "The Graveyard",
+            danger: "low",
+            subcaption: "Stage 1",
             duration: 90,
             enemy: "skeleton"
         },
         {
             identifier: 1,
-            name: "catacombs",
-            caption: "The Catacombs",
-            subcaption: "Level 2",
+            name: "road",
+            caption: "The Road",
+            danger: "very low",
+            subcaption: "Stage 1",
             duration: 150,
             enemy: "fighter"
         },
         {
             identifier: 2,
-            name: "graveyard",
-            caption: "The Graveyard",
-            subcaption: "Level 3",
+            name: "entrance",
+            caption: "Fungeon Entrance",
+            danger: "average",
+            subcaption: "Stage 2",
             duration: 200,
             enemy: "zombie"
         }
@@ -59,9 +63,21 @@ var GameLevelService = {
 
     },
 
+    startLevel: function(){
+
+        this.currentLevel = this.nextLevel
+
+    },
+
+    gameOver: function(){
+
+        this.nextLevel = -1
+        game.state.start("gameover")
+
+    },
+
     nextLevel: function(){
 
-        this.currentLevel++
         this.currentProgress=0
         this.stopTimer()
         game.state.start("stage")
@@ -80,6 +96,12 @@ var GameLevelService = {
 
     },
 
+    setNextLevel: function(level){
+
+        this.nextLevel = level
+
+    },
+
     getCurrentLevel: function(){
 
         return this.levels[this.currentLevel]
@@ -88,6 +110,10 @@ var GameLevelService = {
 
     getLevels: function(){
         return this.levels
+    },
+
+    getLevel: function(lvl){
+            return this.levels[lvl]
     },
 
     setLevel: function(lvl){
@@ -108,7 +134,7 @@ var GameLevelService = {
     },
 
     getCurrentFloor: function(){
-        console.log(this.levels,this.currentLevel)
+        console.log(this.levels[this.currentLevel].name)
         return this.levels[this.currentLevel].name
     }
 

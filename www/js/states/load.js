@@ -13,9 +13,13 @@ var loadState = {
 
         game.load.image('blank', 'assets/gui/blank.png');
 
+        game.load.image('road', 'assets/game/road.jpg');
         game.load.image('entrance', 'assets/game/entrance.jpg');
-        game.load.image('catacombs', 'assets/game/catacombs.jpg');
         game.load.image('graveyard', 'assets/game/graveyard.jpg');
+
+        game.load.spritesheet("level_road","assets/gui/level_road.png",64,64,2);
+        game.load.spritesheet("level_entrance","assets/gui/level_entrance.png",64,64,2);
+        game.load.spritesheet("level_graveyard","assets/gui/level_graveyard.png",64,64,2);
 
         game.load.spritesheet("fungeon","assets/game/fungeon_32x32.png",32,32,20);
 //        game.load.spritesheet("floor","assets/game/floor_32x32.png",32,32,4);
