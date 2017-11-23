@@ -1,5 +1,13 @@
 var GameLevelService = {
 
+    nextLevel: function(){
+
+        this.currentProgress=0
+        this.stopTimer()
+        game.state.start("stage")
+
+    },
+
     nextLevel: -1,
     currentLevel: -1,
     currentProgress: 0,
@@ -11,30 +19,36 @@ var GameLevelService = {
 
         {
             identifier: 0,
+            completed: false,
             name: "graveyard",
             caption: "The Graveyard",
             danger: "low",
             subcaption: "Stage 1",
-            duration: 90,
-            enemy: "skeleton"
+            duration: 9,
+            enemy: "skeleton",
+            button: null
         },
         {
             identifier: 1,
+            completed: false,
             name: "road",
             caption: "The Road",
             danger: "very low",
             subcaption: "Stage 1",
-            duration: 150,
-            enemy: "fighter"
+            duration: 15,
+            enemy: "fighter",
+            button: null
         },
         {
             identifier: 2,
+            completed: false,
             name: "entrance",
             caption: "Fungeon Entrance",
             danger: "average",
             subcaption: "Stage 2",
-            duration: 200,
-            enemy: "zombie"
+            duration: 20,
+            enemy: "zombie",
+            button: null
         }
 
     ],
@@ -45,15 +59,16 @@ var GameLevelService = {
         this.startTimer()
     },
 
-    addProgress: function(amount){
+    addProgress: function(){
 
-        var currentMaxProgress = this.getCurrentLevel().duration
+        var currentMaxProgress = GameLevelService.getCurrentLevel().duration
 
-        this.currentProgress++
+        GameLevelService.currentProgress++
 
-        if(this.currentProgress==currentMaxProgress){
+        if(GameLevelService.currentProgress==currentMaxProgress){
 
-            this.nextLevel()
+            GameLevelService.getCurrentLevel().completed = true
+            game.state.start("stage")
 
         }
 
@@ -65,6 +80,7 @@ var GameLevelService = {
 
     startLevel: function(){
 
+        if(this.currentLevel!=-1)this.getLevel(this.nextLevel).completed = true
         this.currentLevel = this.nextLevel
 
     },
@@ -72,15 +88,12 @@ var GameLevelService = {
     gameOver: function(){
 
         this.nextLevel = -1
+
+        for(var i=0;i<this.levels.length;i++){
+            this.levels[i].completed = false
+        }
+
         game.state.start("gameover")
-
-    },
-
-    nextLevel: function(){
-
-        this.currentProgress=0
-        this.stopTimer()
-        game.state.start("stage")
 
     },
 
@@ -116,25 +129,17 @@ var GameLevelService = {
             return this.levels[lvl]
     },
 
-    setLevel: function(lvl){
-        this.currentLevel = 0
-    },
-
-    setCurrentProgress(progress){
-        this.currentProgress = 0
-    },
-
     getNextLevelCaption: function(){
         return this.levels[this.currentLevel].caption
     },
 
     getStageStateHeading: function(){
-        if(this.currentLevel==0)return "START GAME"
+        if(this.currentLevel==-1)return "START GAME"
         return "STAGE COMPLETED"
     },
 
     getCurrentFloor: function(){
-        console.log(this.levels[this.currentLevel].name)
+        if(this.currentLevel < 0) return ""
         return this.levels[this.currentLevel].name
     }
 
